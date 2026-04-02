@@ -1,0 +1,11 @@
+.vscode
+__pycache__/
+eval/pubmedQA.json
+eval/pubmedQA.py
+data/past_collection
+data/faiss_index
+data/pubmed26n0001.xml
+pipeline/__pycache__/
+vectorstore/old_pubmed.py
+vectorstore/pdf.py
+rag_env
