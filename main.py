@@ -122,20 +122,20 @@ def loadAllData():
 def buildLocalDB():
     ''' RUN THIS FUNCTION ONLY WHEN NEED TO REBUILD THE LOCAL VECTORSTORE DATABASE'''
     # Load and parse PubMed XML data
-    retriever = PubMedParser("data/pubmed26n0001.xml",'analysis/mesh_index.json','analysis/mesh_counts.json')
-    articles = retriever.parse_xml(retriever.src)
+    parser = PubMedParser("data/pubmed26n0001.xml",'analysis/mesh_index.json','analysis/mesh_counts.json')
+    articles = parser.parse_xml(parser.src)
     print(f"Total articles parsed: {len(articles)}")
     # Chunk documents and build vector store
-    docs = retriever.convertParsedArticlesToDocuments(articles)
+    docs = parser.convertParsedArticlesToDocuments(articles)
     print(f"Total documents created: {len(docs)}")
-    chunks = retriever.chunkDocuments()
+    chunks = parser.chunkDocuments()
     print(f"Total chunks created: {len(chunks)}")
     # build vector store and save to disk
     vector_store_path = "data/pubmed_faiss_index"
-    mesh_terms = retriever.buildVectorStore(chunks, vector_store_path)
-    mesh_terms_count = retriever.getNumberOfArticles()
+    mesh_terms = parser.buildVectorStore(chunks, vector_store_path)
+    mesh_terms_count = parser.getNumberOfArticles()
     # load vector store and create retriever
-    vectorstore = retriever.loadVectorStore(vector_store_path, k=5)
+    vectorstore = parser.loadVectorStore(vector_store_path, k=5)
     return vectorstore, mesh_terms, mesh_terms_count
 
 def import_pipelines():
@@ -148,7 +148,7 @@ def import_pipelines():
 def getVectorstore():
     retriever = PubMedParser("data/pubmed26n0001.xml",'analysis/mesh_index.json','analysis/mesh_counts.json')
     vector_store_path = "data/pubmed_faiss_index"
-    vectorstore = retriever.loadVectorStore(vector_store_path, k=5)
+    vectorstore = retriever.loadVectorStore(vector_store_path)
     return vectorstore, retriever
 
 def runInitialCheck(query="",retriever=PubMedParser,meSH_terms=set()):
@@ -162,10 +162,14 @@ def runInitialCheck(query="",retriever=PubMedParser,meSH_terms=set()):
     print("Related MeSH terms:", related_terms)
     return related_terms
 
-def searchContext(q,vectorstore,n=5):
+def searchContext(q,vectorstore,related_terms,n=5):
     # Retrieve relevant chunks based on the query
     # results = [ (Document1,score1), (Document2,score2),...]
-    results = vectorstore.similarity_search_with_score(q,k=n)  # Retrieve top 5 similar chunks for the question
+    results = vectorstore.similarity_search_with_score(
+        q,
+        k=n,
+        #filter={"mesh_terms": {"$in": related_terms}}
+    )  # Retrieve top-k chunks and their L2 distance scores for the question
     
     titles = [r[0].metadata['title'] for r in results]
     print(f"Retrieved articles: {titles}")
@@ -180,7 +184,7 @@ def searchContext(q,vectorstore,n=5):
         # 0.5 - 1.5: strong match
         # 1.5 - 3.0: weak/moderate match
         # 3.0+: irrelevant
-        print(f"Similarity score: {r[1]:.4f}\nDocument: {r[0]}\n")
+        print(f"L2 distance score: {r[1]:.4f}\nDocument: {r[0]}\n")
         
         # Because chunks are sorted ASCENDING by distance, thresholding = 1.50
         # When chunk's L2 distance is too large, break the loop
@@ -275,7 +279,7 @@ if __name__ == "__main__":
     agents = [extractor,verifier,summarizer]
 
     # Run this when need to rebuild the vectorstore
-    # vectorstore, meSH_terms, meSH_terms_counts = buildLocalDB()
+    #vectorstore, meSH_terms, meSH_terms_counts = buildLocalDB()
 
     # Load vectorstore
     vectorstore, rag = getVectorstore()
@@ -308,10 +312,11 @@ if __name__ == "__main__":
     
     for q in test_queries:
         # Check if there is any relevant meSH terms in the query
-        found = runInitialCheck(q,rag,meSH_terms)
-        if found == "None": # if not, move on 
+        related_terms = runInitialCheck(q,rag,meSH_terms)
+        if related_terms == "None": # if not, move on 
             continue
-        context = searchContext(q,vectorstore,5)
+        context = rag.retrieveSimilarChunks(q,"data/pubmed_faiss_index",5)
+        #context = searchContext(q,vectorstore,related_terms,5)
         if context == "None":
             print(">>> No relevant documents found for the question.")
             print(">>> Please rephrase the question or try a new one.")

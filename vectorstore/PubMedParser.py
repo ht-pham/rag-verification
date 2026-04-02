@@ -1,6 +1,6 @@
 import json
-from turtle import pd
 import xml.etree.ElementTree as ET
+from vectorstore.embeddings import NormalizedEmbeddings
 
 class PubMedParser:
     def __init__(self, src: str,mesh_index='mesh_index.json',mesh_stats='mesh_counts.json',docs=[]):
@@ -177,15 +177,63 @@ class PubMedParser:
         return chunks
     
     def retrieveSimilarChunks(self,query,vector_store_path,k=5):
-        retriever = self.loadVectorStore(vector_store_path,k)
-        return retriever._get_relevant_documents(query)
+        # embeddings = NormalizedEmbeddings(
+        #     model_name="all-MiniLM-L6-v2"
+        # )
+        #norm_query = embeddings.embed_query(query=query)
+        retriever = self.loadVectorStore(vector_store_path)
+        
+        # Retrieve relevant chunks based on the query
+        # results = [ (Document1,score1), (Document2,score2),...]
+        results = retriever.similarity_search_with_score(
+            query,
+            k=k,
+            #filter={"mesh_terms": {"$in": related_terms}}
+        )  # Retrieve top-k chunks and their L2 distance scores for the question
+        
+        titles = [r[0].metadata['title'] for r in results]
+        print(f"Retrieved articles: {titles}")
+
+        # Compute cosine similarity scores for retrieved chunks
+        # 0 = completely dissimilar, 1 = identical
+        norm_results = []
+        cos_sim_scores = []
+        for doc, score in results:
+            cos_sim_scores.append(1 - score / 2)
+            norm_results.append((doc, score))
+
+        context = ''
+        relevant_chunks = []
+        
+        for i,r in enumerate(norm_results):
+            # this line is for showing the L2 distance score between the query and the retrieved chunk. 
+            # The smaller the score, the more similar the chunk is to the query.
+            # 0.0 - 0.5: very similar
+            # 0.5 - 1.5: strong match
+            # 1.5 - 3.0: weak/moderate match
+            # 3.0+: irrelevant
+            print(f"Document: {r[0]}\n")
+            print(f"L2 distance score: {r[1]:.4f};\t Cosine similarity score: {cos_sim_scores[i]}")
+            # if cosine similarity score > 0.7, consider it a relevant chunk and add into the context
+            if cos_sim_scores[i] > 0.7:
+                parsed_chunk = r[0].page_content.replace("\n"," ").strip()
+                relevant_chunks.append(parsed_chunk)
+
+
+        context = '\n'.join(relevant_chunks)
+        if context == "":
+            return "None"
+        
+        return context
+        
 
     def buildVectorStore(self,chunks,vector_store_path):
-        from langchain_huggingface import HuggingFaceEmbeddings
+
         from langchain_community.vectorstores import FAISS
-        embeddings = HuggingFaceEmbeddings(
+        embeddings = NormalizedEmbeddings(
             model_name="all-MiniLM-L6-v2"
         )
+        
         vectorstore = FAISS.from_documents(
             chunks,
             embeddings,
@@ -202,14 +250,14 @@ class PubMedParser:
         print(f"Vector store saved to: {vector_store_path}")
 
     
-    def loadVectorStore(self,vector_store_path,k=5):
-        from langchain_huggingface import HuggingFaceEmbeddings
+    def loadVectorStore(self,vector_store_path):
+        #from langchain_huggingface import HuggingFaceEmbeddings
         from langchain_community.vectorstores import FAISS
 
         # Load the FAISS index
         vectorstore = FAISS.load_local(
             vector_store_path, 
-            HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2"),
+            NormalizedEmbeddings(model_name="all-MiniLM-L6-v2"),
             allow_dangerous_deserialization=True
             )
         

@@ -8,7 +8,7 @@ This project implements a **Retrieval-Augmented Generation** pipeline using FAIS
 1. :books: Extract 30,000 articles' title, abstract, and metadata from PubMed library [1]. The file version used for this project is pubmed26n0001.xml. 
 2. :microscope: Filter out articles with too broad or generic meSH terms and all articles without abstract, and save title, abstract, meSH terms of each article as a Document object. The final number of stored articles is 3,698.
 3. :hocho: Split the abstracts into smaller chunks for each article with LangChain Text Splitter. The total number of chunks is 10,340 chunks or vectors
-4. :file_folder: Convert these text chunks into dense numerical vectors with HuggingFace Embeddings all-MiniLM-L6-v2 model and store these dense vectors as a vector store with FAISS for efficient similarity search.
+4. :file_folder: Convert these text chunks into dense numerical vectors with HuggingFace Embeddings all-MiniLM-L6-v2 model and store these dense vectors as a vector store with FAISS IndexFlatL2 for efficient similarity search with Euclidean distance (L2) scores between query and dense vectors.
 5. :mag_right: Retrieve top-k relevant chunks and their similarity scores with similarity_search_with_score(q,k=n) [2]
 
 ### Transformer-based agents for two-staged handling user query
