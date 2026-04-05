@@ -32,10 +32,12 @@ class Verifier(Agent):
 
         # 0 = contradiction, 1 = neutral, 2 = entailment
         contradiction, neutral, entailment = probs[0]
-
-        if entailment > 0.5:
+        label = torch.argmax(probs).item()
+        print(f"Label: {label}")
+        print(f"Contradiction: {contradiction:.4f}, Neutral: {neutral:.4f}, Entailment: {entailment:.4f}")
+        if label == 2:
             return "Yes", entailment.item()
-        elif contradiction > 0.5:
+        elif label == 0:
             return "No", contradiction.item()
         else:
             return "Not enough information", neutral.item()

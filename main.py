@@ -202,21 +202,20 @@ def searchContext(q,vectorstore,related_terms,n=5):
     return context
 
 def run_pipelines(query,context,agents):
+    ''' When context is retrieved, run the rest of the pipelines '''
+
     answer = ""
-    
-    #output = agents[0].generate(query,context)
-    if context == "None":
-        answer = "Not enough information"
+    print(f"*** Extracted context: \n{context} ***\n\n")
+    verified,score = agents[1].classify(query,context)
+    print(f"*** Simple answer: {verified}, confident score: {score} ***")
+    if verified == "Not enough information":
+        answer = verified
+
     else:
-        print(f"*** Extracted context: \n{context} ***\n\n")
-        verified,score = agents[1].classify(query,context)
-        print(f"*** Simple answer: {verified}, confident score: {score} ***")
-        if verified == "Not enough information":
-            answer = verified
-        else:
-            raw_summary, refined_summary = agents[2].summarize(context.replace("\n"," ").strip())
-            print(f"*** Initial summary: {raw_summary} ***")
-            answer = verified + " because "+refined_summary
+        raw_summary, refined_summary = agents[2].summarize(context.replace("\n"," ").strip())
+        print(f"*** Initial summary: {raw_summary} ***")
+        answer = verified + " because "+refined_summary
+    
     return answer
 
 def session(status,q,rag,vectorstore,agents):
@@ -311,17 +310,31 @@ if __name__ == "__main__":
     #                 'Neurotransmitter Agents', 'Norepinephrine', 'NADP', 'Streptococcus pneumoniae'}
     
     for q in test_queries:
+        print(f"Question: {q}")
         # Check if there is any relevant meSH terms in the query
-        related_terms = runInitialCheck(q,rag,meSH_terms)
-        if related_terms == "None": # if not, move on 
-            continue
-        context = rag.retrieveSimilarChunks(q,"data/pubmed_faiss_index",5)
-        #context = searchContext(q,vectorstore,related_terms,5)
+        # related_terms = runInitialCheck(q,rag,meSH_terms)
+        # if related_terms == "None": # if not, move on 
+        #     continue
+        context = rag.retrieveSimilarChunks(q,"data/pubmed_faiss_index",5,False)
+        
+        # Search again if failed to retrieve
         if context == "None":
             print(">>> No relevant documents found for the question.")
+            print(">>> Trying to search again...")
+            context = rag.retrieveSimilarChunks(q,"data/pubmed_faiss_index",25,True)
+
+        # Search again if failed to retrieve
+        if context == "None":
+            print(">>> Second failed attempt to retrieve relevant documents for the question.")
+            print(">>> Trying to search again...")
+            context = rag.retrieveSimilarChunks(q,"data/pubmed_faiss_index",45,True)
+        
+        # Search again if failed to retrieve
+        if context == "None":
+            print(">>> Third failed attempt to retrieve relevant documents for the question.")
             print(">>> Please rephrase the question or try a new one.")
+            print("==============================")
             continue
-        # This line to check the final context to be passed to LLM
         
         answer = run_pipelines(q,context,agents)
         if answer == "Not enough information":

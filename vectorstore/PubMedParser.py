@@ -176,23 +176,43 @@ class PubMedParser:
 
         return chunks
     
-    def retrieveSimilarChunks(self,query,vector_store_path,k=5):
-        # embeddings = NormalizedEmbeddings(
-        #     model_name="all-MiniLM-L6-v2"
-        # )
+    def retrieveSimilarChunks(self,query,vector_store_path,k=5,search_again=False):
         #norm_query = embeddings.embed_query(query=query)
         retriever = self.loadVectorStore(vector_store_path)
         
-        # Retrieve relevant chunks based on the query
+        # Find related MeSH terms from the query
+        related_terms = self.findRelatedMeSHTerms(query)
+        # Retrieve more 20 related docs to filter from vectorstore and avoid out of range error when k is too large
+        large_k = min(k + 20, len(retriever.index_to_docstore_id))
+        
+        # Retrieve relevant chunks based on the query only when there are related MeSH terms found in the query
         # results = [ (Document1,score1), (Document2,score2),...]
-        results = retriever.similarity_search_with_score(
-            query,
-            k=k,
-            #filter={"mesh_terms": {"$in": related_terms}}
-        )  # Retrieve top-k chunks and their L2 distance scores for the question
+        if related_terms:
+            # Start retrieving (k + 20) chunks
+            results = retriever.similarity_search_with_score(
+                query,
+                k=large_k
+            )
+            # Filter results to only include those with matching MeSH terms
+            filtered_results = [
+                r for r in results 
+                if any(term in r[0].metadata.get('mesh_terms', []) for term in related_terms)
+            ]
+            # Take the top k from the filtered results
+            results = filtered_results
+        else: # if no related MeSH terms, return context as "None" 
+            return "None"
         
         titles = [r[0].metadata['title'] for r in results]
-        print(f"Retrieved articles: {titles}")
+        if search_again==False:
+            print(f"Retrieved {len(titles)} articles:")
+            for i,title in enumerate(titles,start=1):
+                print(f"{i}. {title}")
+        else:
+            print(f"Retrieved {len(titles)} articles after searching again.")
+            for i, title in enumerate(titles[k:],start=k+1):
+                print(f"{i}. {title}")
+        
 
         # Compute cosine similarity scores for retrieved chunks
         # 0 = completely dissimilar, 1 = identical
@@ -206,16 +226,24 @@ class PubMedParser:
         relevant_chunks = []
         
         for i,r in enumerate(norm_results):
-            # this line is for showing the L2 distance score between the query and the retrieved chunk. 
-            # The smaller the score, the more similar the chunk is to the query.
+             
+            # About L2 distance score: The smaller the score, the more similar the chunk is to the query.
             # 0.0 - 0.5: very similar
             # 0.5 - 1.5: strong match
             # 1.5 - 3.0: weak/moderate match
             # 3.0+: irrelevant
-            print(f"Document: {r[0]}\n")
-            print(f"L2 distance score: {r[1]:.4f};\t Cosine similarity score: {cos_sim_scores[i]}")
-            # if cosine similarity score > 0.7, consider it a relevant chunk and add into the context
-            if cos_sim_scores[i] > 0.7:
+            # Cosine similarity score: 0: completely dissimilar, 0.5: neutral, 1: identical
+
+            # # Print only half of the retrieved chunks if first time searching:
+            if i < int(large_k/2) and search_again==False:
+                print(f"L2 distance score: {r[1]:.4f};\t Cosine similarity score: {cos_sim_scores[i]:.4f}")
+                print(f"Document: {r[0]}\n")
+            elif i > k and search_again==True:
+                print(f"L2 distance score: {r[1]:.4f};\t Cosine similarity score: {cos_sim_scores[i]:.4f}")
+                print(f"Document: {r[0]}\n")
+
+            # if cosine similarity score >= 0.6, consider it a relevant chunk and add into the context
+            if cos_sim_scores[i] >= 0.6:
                 parsed_chunk = r[0].page_content.replace("\n"," ").strip()
                 relevant_chunks.append(parsed_chunk)
 
@@ -312,7 +340,7 @@ class PubMedParser:
 
         return mesh_terms_list_sorted
 
-    def findRelatedMeSHTerms(self,query,mesh_index):
+    def findRelatedMeSHTerms(self,query):
         '''
         Definition: Finds MeSH terms that are related to a given query by checking for the presence of MeSH terms in the query.
         Args:
@@ -321,8 +349,10 @@ class PubMedParser:
         Returns:
             related_terms (list): A list of MeSH terms that are found in the query.
         '''
+        self.mesh_index = json.load(open("analysis/mesh_index.json","r"))
+
         related_terms = []
-        for term in mesh_index.keys():
+        for term in self.mesh_index.keys():
             if term.lower() in query.lower():
                 related_terms.append(term)
         return related_terms
