@@ -33,6 +33,7 @@ class Verifier(Agent):
         # 0 = contradiction, 1 = neutral, 2 = entailment
         contradiction, neutral, entailment = probs[0]
         label = torch.argmax(probs).item()
+        print("*** Verifying the answer with the retrieved evidence: ***")
         print(f"Label: {label}")
         print(f"Contradiction: {contradiction:.4f}, Neutral: {neutral:.4f}, Entailment: {entailment:.4f}")
         if label == 2:
