@@ -36,7 +36,7 @@ class Verifier(Agent):
         label = torch.argmax(probs).item()
         print("*** Verifying the answer with the retrieved evidence: ***")
         print(f"Label: {label}")
-        print(f"Contradiction: {contradiction:.4f}, Neutral: {neutral:.4f}, Entailment: {entailment:.4f}")
+        print(f"Contradiction [0]: {contradiction:.4f}, Neutral [1]: {neutral:.4f}, Entailment [2]: {entailment:.4f}")
         if label == 2:
             return "Yes", entailment.item()
         elif label == 0:
