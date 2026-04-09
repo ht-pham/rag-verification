@@ -141,7 +141,7 @@ def buildLocalDB():
 def import_pipelines():
     pipeline1 = Extractor("google/flan-t5-large")
     pipeline2 = Verifier("facebook/bart-large-mnli")
-    pipeline3 = Summarizer("facebook/bart-large-mnli")
+    pipeline3 = Summarizer("google/flan-t5-large")
 
     return pipeline1, pipeline2, pipeline3
 

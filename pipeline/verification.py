@@ -15,6 +15,7 @@ class Verifier(Agent):
         hypothesis = f"{query}"
         premises = evidence
 
+        # Manually tokenize and prepare inputs for the model
         inputs = self.tokenizer(
             premises,
             hypothesis,
