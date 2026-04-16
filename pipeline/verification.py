@@ -15,7 +15,7 @@ class Verifier(Agent):
         hypothesis = f"{query}"
         premises = evidence
 
-        # Manually tokenize and prepare inputs for the model
+        # Manually tokenize and prepare input tensors for the model
         inputs = self.tokenizer(
             premises,
             hypothesis,
@@ -23,8 +23,12 @@ class Verifier(Agent):
             truncation=True,
             padding=True
         )
+        # Move inputs to the same device as the model
         inputs = {k: v.to(self.device) for k,v in inputs.items()}
+
+        # Disable gradient calculations for inference
         with torch.no_grad():
+            # get the model's output logits (unnormalized scores for each class)
             outputs = self.model(**inputs)
 
         # Apply softmax to convert to probabilities of outputs
