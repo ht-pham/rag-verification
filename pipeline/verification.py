@@ -1,17 +1,15 @@
 from pipeline.agent import Agent
-from transformers import AutoModelForSequenceClassification
 import torch
 import torch.nn.functional as F
 
 class Verifier(Agent):
-    def __init__(self,model_id):
-        super().__init__(model_id,"zero-shot-classification")
+    def __init__(self, model_id):
+        super().__init__(model_id, "zero-shot-classification")
         self.agent = self.pipeline
         self.device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_id).to(self.device)
+        self.model = self.model.to(self.device)
 
-    def classify(self,query,evidence):
-
+    def classify(self, query, evidence):
         hypothesis = f"{query}"
         premises = evidence
 
@@ -24,11 +22,10 @@ class Verifier(Agent):
             padding=True
         )
         # Move inputs to the same device as the model
-        inputs = {k: v.to(self.device) for k,v in inputs.items()}
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
         # Disable gradient calculations for inference
         with torch.no_grad():
-            # get the model's output logits (unnormalized scores for each class)
             outputs = self.model(**inputs)
 
         # Apply softmax to convert to probabilities of outputs

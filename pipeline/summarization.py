@@ -1,41 +1,33 @@
 from pipeline.agent import Agent
-from transformers import pipeline
-
 
 class Summarizer(Agent):
-    def __init__(self,model_id):
-        super().__init__(model_id,"summarization")
-        
-        
-        self.pipeline = pipeline(
-            task="summarization",
-            model=self.model,
-            tokenizer=self.tokenizer,
+    def __init__(self, model_id):
+        super().__init__(model_id, "text-generation")
+
+    def summarize(self, chunks):
+        summarizer = self.getAgent()
+
+        first_summary = summarizer(
+            chunks,
+            max_length=int(len(chunks.split()) * 0.5),
+            max_new_tokens=int(len(chunks.split()) * 0.5),
+            min_length=100,
             do_sample=False,
             temperature=0.0,
             top_p=1.0,
-            repetition_penalty=1.1
+            repetition_penalty=1.1,
+        )[0]["generated_text"]
 
-        )
-
-    def summarize(self,chunks):
-        
-        summarizer = self.getAgent()
-        
-        first_summary = summarizer(
-            chunks,
-            max_length=int(len(chunks.split())*0.5),
-            max_new_tokens=int(len(chunks.split())*0.5),
-            min_length=100,
-            do_sample=False)[0]["summary_text"]
-        
         final_summary = summarizer(
             first_summary,
-            max_length=int(len(first_summary.split())*0.5),
-            max_new_tokens=int(len(first_summary.split())*0.5),
+            max_length=int(len(first_summary.split()) * 0.5),
+            max_new_tokens=int(len(first_summary.split()) * 0.5),
             min_length=50,
-            do_sample=False
-        )[0]["summary_text"]
+            do_sample=False,
+            temperature=0.0,
+            top_p=1.0,
+            repetition_penalty=1.1,
+        )[0]["generated_text"]
 
         return first_summary, final_summary
 

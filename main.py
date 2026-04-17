@@ -5,8 +5,6 @@ from pipeline.extraction import Extractor
 from pipeline.verification import Verifier
 from pipeline.summarization import Summarizer
 
-
-
 def old_generate_function(query,context):
     ''' PAST FUNCTION - NOT FOR USE ANYMORE
     KEPT FOR RECORD PURPOSES ONLY'''
@@ -139,9 +137,9 @@ def buildLocalDB():
     return vectorstore, mesh_terms, mesh_terms_count
 
 def import_pipelines():
-    pipeline1 = Extractor("google/flan-t5-large")
+    pipeline1 = Extractor("facebook/bart-large-cnn")
     pipeline2 = Verifier("facebook/bart-large-mnli")
-    pipeline3 = Summarizer("google/flan-t5-large")
+    pipeline3 = Summarizer("facebook/bart-large-cnn")
 
     return pipeline1, pipeline2, pipeline3
 

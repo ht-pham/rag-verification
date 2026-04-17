@@ -3,7 +3,7 @@ from pipeline.agent import Agent
 
 class Extractor(Agent):
     def __init__(self,model_id):
-        super().__init__(model_id,"text2text-generation")
+        super().__init__(model_id,"text-generation")
 
     def generate(self,query,context):
         
