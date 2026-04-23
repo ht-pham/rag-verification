@@ -139,7 +139,8 @@ def buildLocalDB():
 def import_pipelines():
     pipeline1 = Extractor("facebook/bart-large-cnn")
     pipeline2 = Verifier("facebook/bart-large-mnli")
-    pipeline3 = Summarizer("facebook/bart-large-cnn")
+    pipeline3 = Summarizer("Qwen/Qwen2.5-3B-Instruct")
+
 
     return pipeline1, pipeline2, pipeline3
 
@@ -210,9 +211,9 @@ def run_pipelines(query,context,agents):
         answer = verified
 
     else:
-        raw_summary, refined_summary = agents[2].summarize(context.replace("\n"," ").strip())
-        print(f"*** Initial summary: {raw_summary} ***")
-        answer = verified + " because "+refined_summary
+        summary = agents[2].summarize(context.replace("\n"," ").strip())
+        print(f"*** Initial summary: {summary} ***")
+        answer = verified + " because "+ summary
     
     return answer
 

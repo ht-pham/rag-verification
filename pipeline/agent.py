@@ -1,4 +1,4 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForSequenceClassification
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForSequenceClassification, AutoModelForCausalLM
 from langchain_huggingface import HuggingFacePipeline
 from transformers import pipeline
 
@@ -10,12 +10,13 @@ class Agent:
 
         if task == "zero-shot-classification":
             self.model = AutoModelForSequenceClassification.from_pretrained(model_id)
-            self.pipeline = pipeline(task=task, model=self.model, tokenizer=self.tokenizer)
-            self.agent = self.pipeline
+            
         else:
-            self.model = AutoModelForSeq2SeqLM.from_pretrained(model_id)
-            self.pipeline = pipeline(task=task, model=self.model, tokenizer=self.tokenizer)
-            self.agent = HuggingFacePipeline(pipeline=self.pipeline)
+            self.model = AutoModelForCausalLM.from_pretrained(model_id,device_map="auto",dtype="auto")
+        
+    
+        self.pipeline = pipeline(task=task, model=self.model, tokenizer=self.tokenizer)
+        self.agent = self.pipeline
 
     def getModelId(self):
         return self.model_id
