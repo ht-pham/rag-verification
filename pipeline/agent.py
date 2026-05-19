@@ -12,6 +12,7 @@ class Agent:
             self.model = AutoModelForSequenceClassification.from_pretrained(model_id)
             
         else:
+            #self.model = AutoModelForSeq2SeqLM.from_pretrained(model_id,device_map="auto",dtype="auto")
             self.model = AutoModelForCausalLM.from_pretrained(model_id,device_map="auto",dtype="auto")
         
     
