@@ -78,7 +78,7 @@ class PubMedParser:
 
         return articles
 
-    def convertParsedArticlesToDocuments(self,articles):
+    def convert_articles_to_documents(self,articles):
         '''
         Definition: Converts the parsed articles into a format suitable for building a vector store, where each article is represented as a document containing its abstract and metadata.
         Args:
@@ -122,7 +122,7 @@ class PubMedParser:
                 self.docs.append(Document(page_content=content, metadata=metadata))
         
         # Export Documents to JSON
-        docs = self.exportDocsToJSON(self.docs,'data/documents.json')
+        docs = self.export_docs_to_json(self.docs,'data/documents.json')
         # docs = []
         # for d in self.docs:
         #     d.id = d.metadata["title"]
@@ -133,10 +133,10 @@ class PubMedParser:
         #     json.dump(docs,file,indent=4) 
 
         # Export MeSH terms with its documents to JSON
-        self.mesh_index = self.buildMeSHIndex(docs=docs)
+        self.mesh_index = self.build_mesh_index(docs=docs)
         return self.docs
     
-    def exportDocsToJSON(self,listOfDocs,file_path):
+    def export_docs_to_json(self,listOfDocs,file_path):
         docs = []
         for d in listOfDocs:
             d.id = d.metadata["title"]
@@ -148,7 +148,7 @@ class PubMedParser:
         return docs
 
 
-    def chunkDocuments(self):
+    def chunk_documents(self):
         from langchain_text_splitters import RecursiveCharacterTextSplitter
 
         splitter = RecursiveCharacterTextSplitter(
@@ -176,12 +176,12 @@ class PubMedParser:
 
         return chunks
     
-    def retrieveSimilarChunks(self,query,vector_store_path,k=5,search_again=False):
+    def retrieve_similar_chunks(self,query,vector_store_path,k=5,search_again=False):
         #norm_query = embeddings.embed_query(query=query)
-        retriever = self.loadVectorStore(vector_store_path)
+        retriever = self.load_vectorstore(vector_store_path)
         
         # Find related MeSH terms from the query
-        related_terms = self.findRelatedMeSHTerms(query)
+        related_terms = self.find_related_mesh_terms(query)
         # Retrieve more 20 related docs to filter from vectorstore and avoid out of range error when k is too large
         large_k = min(k + 20, len(retriever.index_to_docstore_id))
         
@@ -255,7 +255,7 @@ class PubMedParser:
         return context
         
 
-    def buildVectorStore(self,chunks,vector_store_path):
+    def build_vectorstore(self,chunks,vector_store_path):
 
         from langchain_community.vectorstores import FAISS
         embeddings = NormalizedEmbeddings(
@@ -278,7 +278,7 @@ class PubMedParser:
         print(f"Vector store saved to: {vector_store_path}")
 
     
-    def loadVectorStore(self,vector_store_path):
+    def load_vectorstore(self,vector_store_path):
         #from langchain_huggingface import HuggingFaceEmbeddings
         from langchain_community.vectorstores import FAISS
 
@@ -292,7 +292,7 @@ class PubMedParser:
         #return vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": k})
         return vectorstore
     
-    def buildMeSHIndex(self,docs):
+    def build_mesh_index(self,docs):
         '''
         Definition: Builds an index of MeSH terms to look up associated article titles.
         Args:
@@ -314,7 +314,7 @@ class PubMedParser:
 
         return self.mesh_index
 
-    def getNumberOfArticles(self):
+    def get_number_of_articles(self):
         '''
         Definition: Prints the number of articles associated with each MeSH term in a specified range.
         Args:
@@ -340,7 +340,7 @@ class PubMedParser:
 
         return mesh_terms_list_sorted
 
-    def findRelatedMeSHTerms(self,query):
+    def find_related_mesh_terms(self,query):
         '''
         Definition: Finds MeSH terms that are related to a given query by checking for the presence of MeSH terms in the query.
         Args:
