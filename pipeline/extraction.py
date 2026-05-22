@@ -33,16 +33,16 @@ class Extractor(Agent):
             If nothing is relevant: 
             None
             """
-        extractor = self.getAgent()
+        extractor = self.get_agent()
         self.answer = extractor.invoke([prompt])
         return self.answer
     
     def printOutput(self):
         print(self.answer)
 
-    def getModelId(self):
-        return super().getModelId()
-    def getTask(self):
-        return super().getTask()
-    def getAgent(self):
-        return super().getAgent()
+    def get_model_id(self):
+        return super().get_model_id()
+    def get_task(self):
+        return super().get_task()
+    def get_agent(self):
+        return super().get_agent()

@@ -47,9 +47,9 @@ class Verifier(Agent):
 
         
     
-    def getModelId(self):
-        return super().getModelId()
-    def getTask(self):
-        return super().getTask()
-    def getAgent(self):
+    def get_model_id(self):
+        return super().get_model_id()
+    def get_task(self):
+        return super().get_task()
+    def get_agent(self):
         return self.pipeline

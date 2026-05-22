@@ -19,11 +19,11 @@ class Agent:
         self.pipeline = pipeline(task=task, model=self.model, tokenizer=self.tokenizer)
         self.agent = self.pipeline
 
-    def getModelId(self):
+    def get_model_id(self):
         return self.model_id
 
-    def getTask(self):
+    def get_task(self):
         return self.task
 
-    def getAgent(self):
+    def get_agent(self):
         return self.agent
