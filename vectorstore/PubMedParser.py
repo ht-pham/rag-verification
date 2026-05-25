@@ -228,10 +228,10 @@ class PubMedParser:
         for i,r in enumerate(norm_results):
              
             # About L2 distance score: The smaller the score, the more similar the chunk is to the query.
-            # 0.0 - 0.5: very similar
-            # 0.5 - 1.5: strong match
-            # 1.5 - 3.0: weak/moderate match
-            # 3.0+: irrelevant
+            # 0.0 - 0.5: almost identical
+            # 0.5 - 1.3: strong match
+            # 1.41: perpendicular (orthogonal) vectors, meaning no similarity 
+            # 1.5 - 2.0: opposite match
             # Cosine similarity score: 0: completely dissimilar, 0.5: neutral, 1: identical
 
             # # Print only half of the retrieved chunks if first time searching:
@@ -246,7 +246,6 @@ class PubMedParser:
             if cos_sim_scores[i] >= 0.6:
                 parsed_chunk = r[0].page_content.replace("\n"," ").strip()
                 relevant_chunks.append(parsed_chunk)
-
 
         context = '\n'.join(relevant_chunks)
         if context == "":
