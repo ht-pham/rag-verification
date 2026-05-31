@@ -232,7 +232,11 @@ class PubMedParser:
             # 0.5 - 1.3: strong match
             # 1.41: perpendicular (orthogonal) vectors, meaning no similarity 
             # 1.5 - 2.0: opposite match
-            # Cosine similarity score: 0: completely dissimilar, 0.5: neutral, 1: identical
+            # Cosine similarity score: 
+            #  -1: completely dissimilar, 0: neutral/unrelated, 1: identical
+            # -0.99 -> -0.5: opposite match 
+            # -0.4 -> 0.5: weak match
+            # 0.6+: strong match 
 
             # # Print only half of the retrieved chunks if first time searching:
             if i < int(large_k/2) and search_again==False:

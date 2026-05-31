@@ -16,4 +16,5 @@ faiss-cpu>=1.13.0
 
 # other utilities
 python-dotenv
+markdown
 tqdm

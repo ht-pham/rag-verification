@@ -7,21 +7,7 @@ from pipeline.summarization import Summarizer
 
 import random
 
-def load_all_data():
-    ''' Only meSH_terms is used. The remaining files are for future use '''
-    with open('analysis/mesh_index.json','r') as file:
-        meSH_terms = json.load(file)
-
-    with open('analysis/mesh_counts.json','r') as file:
-        meSH_terms_counts = json.load(file)
-
-    with open('test/testQA.json','r') as file:
-        qa = json.load(file)
-    with open('data/documents.json','r') as file:
-        docs = json.load(file)
-    
-    return meSH_terms, meSH_terms_counts, qa, docs
-
+#------------------- BUILDING LOCAL DATABASE ----------------------------
 def build_local_db():
     ''' RUN THIS FUNCTION ONLY WHEN NEED TO REBUILD THE LOCAL VECTORSTORE DATABASE'''
     # Load and parse PubMed XML data
@@ -40,14 +26,23 @@ def build_local_db():
     # load vector store and create retriever
     vectorstore = parser.load_vectorstore(vector_store_path, k=5)
     return vectorstore, mesh_terms, mesh_terms_count
+#------------------- END OF BUILDING LOCAL DATABASE ----------------------
 
-def import_pipelines():
-    pipeline1 = Extractor("facebook/bart-large-cnn")
-    pipeline2 = Verifier("facebook/bart-large-mnli")
-    #pipeline3 = Summarizer("google/flan-t5-large")
-    pipeline3 = Summarizer("Qwen/Qwen2.5-3B-Instruct")
+#------------------- LOADING COMPONENTS' FUNCTIONS ------------------------------
+def load_all_data():
+    ''' Only meSH_terms is used. The remaining files are for future use '''
+    with open('analysis/mesh_index.json','r') as file:
+        meSH_terms = json.load(file)
+
+    with open('analysis/mesh_counts.json','r') as file:
+        meSH_terms_counts = json.load(file)
+
+    with open('test/testQA.json','r') as file:
+        qa = json.load(file)
+    with open('data/documents.json','r') as file:
+        docs = json.load(file)
     
-    return pipeline1, pipeline2, pipeline3
+    return meSH_terms, meSH_terms_counts, qa, docs
 
 def get_vectorstore():
     retriever = PubMedParser("data/pubmed26n0001.xml",'analysis/mesh_index.json','analysis/mesh_counts.json')
@@ -55,16 +50,19 @@ def get_vectorstore():
     vectorstore = retriever.load_vectorstore(vector_store_path)
     return vectorstore, retriever
 
-def runInitialCheck(query="",retriever=PubMedParser,meSH_terms=set()):
-    related_terms = retriever.find_related_mesh_terms(query,meSH_terms)
-    print(f"Question:\n{query}")
-    if related_terms == []:
-        print(">>> No MeSH terms found for this question. Unable to retrieve relevant chunks.")
-        print("==============================")
-        return "None"
-    
-    print("Related MeSH terms:", related_terms)
-    return related_terms
+def load_components():
+    # Load vectorstore
+    vectorstore, rag = get_vectorstore()
+
+    # Load all agents
+    pipeline1 = Verifier("facebook/bart-large-mnli")
+    #pipeline2 = Summarizer("google/flan-t5-large")
+    pipeline2 = Summarizer("Qwen/Qwen2.5-3B-Instruct")
+    agents = [pipeline1,pipeline2]
+
+    return rag, agents
+
+#------------------ END OF LOADING COMPONENTS' FUNCTION ------------------------
 
 
 def run_generation_pipeline(query,context,agents):
@@ -72,19 +70,20 @@ def run_generation_pipeline(query,context,agents):
 
     answer = ""
     print(f"*** Extracted context: \n{context} ***\n\n")
-    verified,score = agents[1].classify(query,context)
+    verified,score = agents[0].classify(query,context)
     print(f"*** Simple answer: {verified}, confident score: {score} ***")
     if verified == "Not enough information":
         answer = verified
 
     else:
-        summary = agents[2].summarize(context.replace("\n"," ").strip())
+        summary = agents[1].summarize(context.replace("\n"," ").strip())
         print(f"*** Initial summary: {summary} ***")
         answer = verified + " because "+ summary
     
     return answer
 
-def recursive_retrieval(search_limit,query,k,rag):
+def recursive_retrieval(search_limit,query,k,rag,agents):
+
     times = range(1,search_limit+1)
     searches = {i:f"Search attempt #{i} " for i in times}
 
@@ -109,22 +108,9 @@ def recursive_retrieval(search_limit,query,k,rag):
             print("==============================")
             break
 
+def run_demo():
 
-            
-    
-
-if __name__ == "__main__":
-    # Load all agents
-    extractor,verifier,summarizer = import_pipelines()
-    agents = [extractor,verifier,summarizer]
-
-    # Run this when need to rebuild the vectorstore
-    #vectorstore, meSH_terms, meSH_terms_counts = build_local_db()
-
-    # Load vectorstore
-    vectorstore, rag = get_vectorstore()
-
-    meSH_terms, meSH_terms_counts, qa, docs = load_all_data()
+    rag, agents = load_components()
 
     test_queries = [
         "Do beta-antagonists reduce heart rate?",
@@ -142,11 +128,28 @@ if __name__ == "__main__":
     random_query_index = random.randint(0, len(test_queries)-1)
     query = test_queries[random_query_index]
     print(f"Selected question: {query}")
-    recursive_retrieval(search_limit=10,query=query,k=5,rag=rag)
+    recursive_retrieval(search_limit=10,query=query,k=5,rag=rag,agents=agents)        
+    # for q in test_queries:
+    #     print(f"Question: {q}")
+    #     recursive_retrieval(search_limit=3,query=q,k=5,rag=rag,agents=agents)
+
+
+if __name__ == "__main__":
+
+    # Run this when need to rebuild the vectorstore
+    #vectorstore, meSH_terms, meSH_terms_counts = build_local_db()
+    #meSH_terms, meSH_terms_counts, qa, docs = load_all_data()
+
+    # Load vectorstore
+    #rag, agents = load_components()
+
+    # run demo with random selected question
+    run_demo()
     
-    for q in test_queries:
-        print(f"Question: {q}")
-        recursive_retrieval(search_limit=3,query=q,k=5,rag=rag)
+    # parser = PubMedParser("data/pubmed26n0001.xml",'analysis/mesh_index.json','analysis/mesh_counts.json')
+    # terms = parser.find_related_mesh_terms("Do beta-blockers lower blood pressure?")
+    # print(terms)
+    
     
             
 
