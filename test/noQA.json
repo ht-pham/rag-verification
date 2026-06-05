@@ -1,0 +1,257 @@
+{
+    "Microsomes, Liver": {
+        "queries": [
+            "Do liver microsomes inhibit cytochrome P450-mediated drug metabolism?",
+            "Does increased liver microsomal activity reduce drug biotransformation?",
+            "Do liver microsomes prevent first-pass metabolism of orally administered drugs?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    
+    "Transplantation, Homologous": {
+        "queries": [
+            "Does homologous transplantation eliminate the risk of immune rejection?",
+            "Does tissue incompatibility improve homologous transplant survival?",
+            "Does homologous transplantation suppress recipient immune recognition of donor tissue?"
+        ],
+        "answers": ["No","No","No"]
+    },
+   
+    "Adrenergic beta-Antagonists": {
+        "queries": [
+            "Do adrenergic beta-antagonists increase resting heart rate in hypertensive patients?",
+            "Do beta-antagonists stimulate beta-adrenergic receptor signaling?",
+            "Do adrenergic beta-antagonists increase blood pressure through sympathetic activation?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Neurotransmitter Agents": {
+        "queries": [
+            "Do neurotransmitter agents universally suppress synaptic transmission?",
+            "Do neurotransmitter agents function independently of receptor binding?",
+            "Do neurotransmitter agents prevent neuronal communication between synapses?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Drug Interactions": {
+        "queries": [
+            "Do cytochrome P450-mediated drug interactions generally increase drug elimination without affecting efficacy?",
+            "Are clinically significant drug interactions unrelated to drug metabolism?",
+            "Do drug interactions occur only between chemically identical compounds?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    
+    "NAD": {
+        "queries": [
+            "Does NAD depletion enhance mitochondrial energy production?",
+            "Is NAD unnecessary for cellular redox reactions?",
+            "Does increasing NAD deficiency improve metabolic efficiency?"   
+        ],
+        "answers":["No","No","No"]
+    },
+    "Drug Stability": {
+        "queries":[
+            "Does elevated storage temperature improve the stability of most pharmaceutical drugs?",
+            "Does exposure to humidity universally increase drug shelf life?",
+            "Can degradation products improve pharmaceutical stability over time?"],
+        "answers":["No","No","No"]
+    },
+    "Antipsychotic Agents": {
+        "queries":[
+            "Do antipsychotic agents increase dopaminergic signaling to treat psychosis?",
+            "Do antipsychotic agents worsen psychotic symptoms through receptor blockade?",
+            "Are atypical antipsychotics less likely than typical antipsychotics to affect dopamine receptors?"],
+        "answers":["No","No","No"]
+    },
+    "Cyclic AMP": { 
+        "queries":[
+            "Does cyclic AMP inhibit protein kinase A activation?",
+            "Do increased cyclic AMP levels suppress intracellular signal transduction?",
+            "Is cyclic AMP degradation required for activation of cyclic AMP signaling pathways?"
+        ],
+        "answers":["No","No","No"]
+    },
+   
+    "Protein Conformation": {
+        "queries":[
+            "Does altering protein conformation generally improve protein function regardless of structure?",
+            "Are protein conformational changes unrelated to enzyme activity?",
+            "Do disease-causing mutations typically preserve protein conformation and function?"
+        ],
+        "answers":["No","No","No"]
+    },
+   
+    "Biological Transport, Active": {
+        "queries":[
+            "Does active transport move molecules exclusively down their concentration gradients?",
+            "Do ATP-dependent transporters function without ATP hydrolysis?",
+            "Does active transport eliminate transmembrane ion gradients?"
+        ],
+        "answers":["No","No","No"]
+    },
+    
+    "Anti-Anxiety Agents": {
+        "queries":[
+            "Can SNRIs remove anxiety symptoms in treated patients without causing significant side effects?",
+            "Do benzodiazepines reduce GABAergic neurotransmission?",
+            "Are SSRIs ineffective for the treatment of anxiety disorders?"
+        ],
+        "answers":["No","No","No"]
+    },
+    
+    "Structure-Activity Relationship": {
+        "queries":[
+            "Is receptor binding affinity independent of molecular structure?",
+            "Does SAR analysis provide no useful information for drug optimization?",
+            "Are computational models unable to predict structure-activity relationships?"
+        ],
+        "answers":["No","No","No"]
+    },
+    
+    "Streptococcus pneumoniae": {
+        "queries":[
+            "Is Streptococcus pneumoniae primarily a viral pathogen?",
+            "Does Streptococcus pneumoniae lack virulence factors that contribute to infection?",
+            "Are antibiotics generally ineffective against susceptible Streptococcus pneumoniae infections?"  
+        ],
+        "answers":["No","No","No"]
+    },
+    "Adenosine Triphosphate": {
+        "queries":[
+            "Does ATP hydrolysis inhibit energy-dependent cellular processes?",
+            "Is ATP unnecessary for skeletal muscle contraction?",
+            "Does oxidative phosphorylation reduce cellular ATP production?"
+        ],
+        "answers":["No","No","No"]
+    },
+    "Heart Rate": {
+        "queries": [
+            "Do beta-blockers increase resting heart rate in most patients?",
+            "Is heart rate completely independent of autonomic nervous system regulation?",
+            "Does a decrease in heart rate generally increase myocardial oxygen demand?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Blood Pressure": {
+        "queries": [
+            "Does activation of the renin-angiotensin system lower blood pressure?",
+            "Do ACE inhibitors increase systemic blood pressure?",
+            "Is vascular resistance unrelated to blood pressure regulation?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Muscle Contraction": {
+        "queries": [
+            "Do calcium ions inhibit skeletal muscle contraction under normal physiological conditions?",
+            "Is ATP hydrolysis unnecessary for cross-bridge cycling during muscle contraction?",
+            "Does troponin activation prevent actin-myosin interaction?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Serotonin": {
+        "queries":[
+            "Does serotonin depletion improve mood disorders?",
+            "Do SSRIs reduce synaptic serotonin availability?",
+            "Is serotonin signaling unrelated to emotional regulation?"
+        ],
+        "answers":["No","No","No"]
+    },
+    "Isoproterenol": {
+        "queries": [
+            "Does isoproterenol block beta-adrenergic receptor activation?",
+            "Does isoproterenol decrease heart rate through beta-receptor inhibition?",
+            "Is isoproterenol primarily used to suppress cardiac contractility?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Enzyme Activation": {
+        "queries": [
+            "Does enzyme activation generally reduce catalytic activity?",
+            "Are cofactors incapable of promoting enzyme activation?",
+            "Does phosphorylation universally inhibit enzyme function?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Tyrosine 3-Monooxygenase": {
+        "queries": [
+            "Does inhibition of tyrosine 3-monooxygenase increase catecholamine synthesis?",
+            "Is tyrosine 3-monooxygenase unrelated to dopamine biosynthesis?",
+            "Does reduced tyrosine hydroxylase activity enhance dopaminergic neurotransmission?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Myocardium": {
+        "queries": [
+            "Does myocardial ischemia improve cardiac oxygen delivery?",
+            "Is calcium signaling unnecessary for myocardial contraction?",
+            "Does chronic hypertension prevent myocardial hypertrophy?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Escherichia coli": {
+        "queries": [
+            "Is Escherichia coli exclusively a viral pathogen?",
+            "Does Escherichia coli lack mechanisms for developing antibiotic resistance?",
+            "Are standard microbiological cultures unable to detect Escherichia coli?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Norepinephrine": {
+        "queries": [
+            "Does norepinephrine reduce vascular tone through vasodilation in most tissues?",
+            "Is norepinephrine synthesis independent of dopamine metabolism?",
+            "Do adrenergic receptors play no role in norepinephrine signaling?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "NADP": {
+        "queries": [
+            "Is NADP unnecessary for anabolic metabolic pathways?",
+            "Does NADPH primarily function as an oxidizing agent in biosynthesis?",
+            "Is NADP unrelated to the pentose phosphate pathway?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Membrane Potentials": {
+        "queries": [
+            "Are membrane potentials generated independently of ion gradients?",
+            "Does depolarization prevent action potential initiation in excitable cells?",
+            "Are potassium channels unimportant for maintaining resting membrane potential?"
+        ],
+        "answers": ["No","No","No"]
+    }, 
+    "Hypertension": {
+        "queries": [
+            "Does obesity reduce the risk of developing hypertension?",
+            "Does chronic hypertension protect against cardiovascular remodeling?",
+            "Are lifestyle interventions ineffective at lowering elevated blood pressure?"
+        ],
+        "answers": ["No","No","No"]
+    },
+
+    "Propranolol": {
+        "queries": [
+            "Does propranolol increase resting heart rate in patients with cardiovascular disease?",
+            "Is propranolol a beta-adrenergic receptor agonist?",
+            "Does propranolol enhance sympathetic stimulation of the heart?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Graft vs Host Reaction": {
+        "queries": [
+            "Does graft-versus-host disease occur in the absence of donor immune cells?",
+            "Is graft-versus-host disease unrelated to allogeneic transplantation?",
+            "Does graft-versus-host disease exclusively affect transplanted donor tissue?"
+        ],
+        "answers": ["No","No","No"]
+    },
+    "Dopamine": {
+        "queries": [
+            "Does dopamine depletion improve motor function?",
+            "Is dopamine signaling unrelated to reward processing?",
+            "Does reduced dopamine transmission alleviate Parkinsonian symptoms?"
+        ],
+        "answers": ["No","No","No"]
+    }
+}

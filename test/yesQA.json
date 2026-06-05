@@ -1,0 +1,257 @@
+{
+    "Microsomes, Liver": {
+        "queries": [
+            "Do liver microsomes significantly contribute to cytochrome P450-mediated drug metabolism?",
+            "Can enzyme kinetics in liver microsomes be accurately measured using in vitro experimental methods?",
+            "Do liver microsomes play a major role in the first-pass metabolism of orally administered drugs?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    
+    "Transplantation, Homologous": {
+        "queries": [
+            "Do immunological incompatibilities significantly increase the risk of homologous transplant rejection?",
+            "Does tissue compatibility improve outcomes following homologous transplantation?",
+            "Is graft rejection primarily mediated by immune recognition of donor antigens in homologous transplantation?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+   
+    "Adrenergic beta-Antagonists": {
+        "queries": [
+            "Do adrenergic beta-antagonists reduce heart rate and blood pressure?",
+            "Are beta-blockers effective in the treatment of hypertension?",
+            "Do selective and non-selective beta-antagonists produce different clinical effects?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Neurotransmitter Agents": {
+        "queries": [
+            "Do neurotransmitter agents alter synaptic transmission?",
+            "Can neurotransmitter agents improve symptoms of central nervous system disorders?",
+            "Are neurotransmitter agents classified according to receptor specificity?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Drug Interactions": {
+        "queries": [
+            "Do pharmacokinetic drug interactions commonly result from molecular alterations in drug metabolism?",
+            "Do cytochrome P450 enzymes mediate clinically significant drug-drug interactions?",
+            "Can adverse drug interactions lead to serious clinical consequences?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    
+    "NAD": {
+        "queries": [
+            "Does NAD function as an essential cofactor in cellular redox reactions?",
+            "Is NAD directly involved in glycolytic metabolism?",
+            "Do reduced NAD levels impair mitochondrial function?"   
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+    "Drug Stability": {
+        "queries":[
+            "Does temperature affect the chemical stability of pharmaceutical drugs?",
+            "Does exposure to light reduce the stability of some pharmaceutical drugs?",
+            "Is high-performance liquid chromatography commonly used to assess drug stability?"],
+        "answers":["Yes","Yes","Yes"]
+    },
+    "Antipsychotic Agents": {
+        "queries":[
+            "Do antipsychotic agents modulate dopamine signaling pathways?",
+            "Do atypical antipsychotic agents differ from typical antipsychotics in receptor activity profiles?",
+            "Can long-term antipsychotic therapy cause significant adverse effects?"],
+        "answers":["Yes","Yes","Yes"]
+    },
+    "Cyclic AMP": {
+        "queries":[
+            "Does cyclic AMP act as an intracellular second messenger?",
+            "Does adenylyl cyclase catalyze cyclic AMP synthesis?",
+            "Can elevated cyclic AMP levels alter protein phosphorylation?"
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+   
+    "Protein Conformation": {
+        "queries":[
+            "Does protein misfolding reduce enzymatic function?",
+            "Can cryo-electron microscopy reveal protein structure?",
+            "Can amino acid substitutions alter protein conformation?"
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+   
+    "Biological Transport, Active": {
+        "queries":[
+            "Can passive transport occur without ATP consumption?",
+            "Do ATP-dependent transporters use ATP hydrolysis to move molecules across membranes?",
+            "Is the sodium-potassium pump involved in active ion transport?"
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+    
+    "Anti-Anxiety Agents": {
+        "queries":[
+            "Can anti-anxiety agents increase inhibitory signaling in the CNS?",
+            "Do benzodiazepines produce a faster anxiolytic effect than SSRIs?",
+            "Does prolonged anti-anxiety medication use increase withdrawal risk?"
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+    
+    "Structure-Activity Relationship": {
+        "queries":[
+            "Does SAR help identify molecular determinants of biological activity?",
+            "Do hydrophobic interactions contribute to ligand-receptor binding?",
+            "Is molecular docking commonly used in SAR research?"
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+    
+    "Streptococcus pneumoniae": {
+        "queries":[
+            "Do specific virulence factors contribute to Streptococcus pneumoniae pathogenicity?",
+            "Can Streptococcus pneumoniae evade host immune responses?",
+            "Are beta-lactam antibiotics effective against Streptococcus pneumoniae infections?"  
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+    "Adenosine Triphosphate": {
+        "queries":[
+            "Does ATP facilitate muscle relaxation following contraction?",
+            "Is ATP considered the primary energy currency of the cell?",
+            "Does the mitochondrial proton gradient drive ATP synthesis?"
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+    "Heart Rate": {
+        "queries": [
+            "Can heart rate variability reflect autonomic nervous system function?",
+            "Can beta-blockers reduce resting heart rate?",
+            "Does increased heart rate generally increase cardiac output?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Blood Pressure": {
+        "queries": [
+            "Can hypertension cause vascular remodeling?",
+            "Does activation of the renin-angiotensin system increase blood pressure?",
+            "Does sodium intake influence blood pressure regulation?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Muscle Contraction": {
+        "queries": [
+            "Does calcium trigger skeletal muscle contraction?",
+            "Is ATP required for cross-bridge cycling during muscle contraction?",
+            "Does troponin regulate calcium-mediated contraction?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Serotonin": {
+        "queries":[
+            "Does serotonin influence mood regulation?",
+            "Are 5-HT receptors responsible for serotonin signaling?",
+            "Can altered serotonin levels contribute to depression?"
+        ],
+        "answers":["Yes","Yes","Yes"]
+    },
+    "Isoproterenol": {
+        "queries": [
+            "Can isoproterenol increase heart rate?",
+            "Does isoproterenol increase myocardial contractility?",
+            "Does isoproterenol activate beta-adrenergic receptors?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Enzyme Activation": {
+        "queries": [
+            "Can adverse drug interactions lead to serious clinical consequences?",
+            "Do cofactors influence enzyme activation?",
+            "Can phosphorylation activate enzymes?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Tyrosine 3-Monooxygenase": {
+        "queries": [
+            "Is tyrosine 3-monooxygenase the rate-limiting enzyme in catecholamine synthesis?",
+            "Can phosphorylation regulate tyrosine hydroxylase activity?",
+            "Does tyrosine 3-monooxygenase deficiency lead to dopamine deficiency?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Myocardium": {
+        "queries": [
+            "Is calcium signaling required for myocardial contraction?",
+            "Does chronic ischemia impair myocardial function?",
+            "Does myocardial ischemia reduce oxygen delivery to cardiac tissue?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Escherichia coli": {
+        "queries": [
+            "Do pathogenic strains of Escherichia coli possess virulence mechanisms that promote infection?",
+            "Can Escherichia coli develop resistance to commonly used antibiotics?",
+            "Can laboratory culture methods reliably detect Escherichia coli?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Norepinephrine": {
+        "queries": [
+            "Does norepinephrine regulate blood pressure?",
+            "Do alpha-adrenergic receptors mediate vasoconstrictive effects of norepinephrine?",
+            "Can norepinephrine influence cardiac output?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "NADP": {
+        "queries": [
+            "Does NADP serve different cellular functions than NAD?",
+            "Does NADP participate in anabolic metabolic pathways?",
+            "Does NADPH provide reducing power for biosynthetic reactions?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Membrane Potentials": {
+        "queries": [
+            "Do membrane potentials contribute to neuronal signaling?",
+            "Can depolarization trigger action potentials?",
+            "Are potassium channels important for maintaining resting membrane potential?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    }, 
+    "Hypertension": {
+        "queries": [
+            "Do genetic and environmental factors contribute to hypertension?",
+            "Does chronic hypertension cause cardiovascular remodeling?",
+            "Can lifestyle modifications reduce the risk of hypertension?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+
+    "Propranolol": {
+        "queries": [
+            "Can propranolol cause bronchoconstriction in susceptible patients?",
+            "Is propranolol a non-selective beta-adrenergic antagonist?",
+            "Does propranolol cross the blood-brain barrier?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Graft vs Host Reaction": {
+        "queries": [
+            "Do immunological mechanisms drive graft versus host reaction?",
+            "Can graft versus host disease be prevented in transplantation?",
+            "Do specific tissues are most commonly affected in graft versus host disease?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    },
+    "Dopamine": {
+        "queries": [
+            "Does dopamine play a critical role in motor control?",
+            "Is dopamine involved in neural reward pathways?",
+            "Is dopamine dysregulation associated with psychiatric disorders?"
+        ],
+        "answers": ["Yes","Yes","Yes"]
+    }
+}
