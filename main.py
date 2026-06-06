@@ -76,9 +76,10 @@ def run_generation_pipeline(query,context,agents):
         answer = verified
 
     else:
-        summary = agents[1].summarize(context.replace("\n"," ").strip())
-        print(f"*** Initial summary: {summary} ***")
-        answer = verified + " because "+ summary
+        # summary = agents[1].summarize(context.replace("\n"," ").strip())
+        # print(f"*** Initial summary: {summary} ***")
+        # answer = verified + " because "+ summary
+        answer = verified #+ " because " + context.replace("\n"," ").strip()
     
     return verified, answer
 
@@ -160,6 +161,31 @@ def run_demo(file_path='test/yesQA.json',output_path='test/yesQA_results.json',s
     # #     print(f"Question: {q}")
     # #     recursive_retrieval(search_limit=3,query=q,k=5,rag=rag,agents=agents)
 
+def run_pubmedQA(file_path='test/pubmedQA_labeled.json',output_path='test/pubmedQA_results.json',search_limit=10,k=5):
+
+    rag, agents = load_components()
+
+    test_queries = []
+    contexts = []
+    
+    with open(file_path,'r') as file:
+        all_qa = json.load(file)
+
+    for qa in all_qa:
+        print(f"MeSH Term: {qa['context']['meshes']}")
+        print(f"Question: {qa['question']}")
+        test_queries.append(qa['question'])
+        context, verified, answer=recursive_retrieval(search_limit=search_limit,query=qa['question'],k=k,rag=rag,agents=agents)
+        contexts.append({
+            "mesh_term": qa['context']['meshes'],
+            "question": qa['question'],
+            "verified_answer": verified,
+            "final_answer": answer,
+            "context": context}
+        )
+
+    with open(output_path,'w') as file:
+        json.dump(contexts, file, indent=4)
 
 if __name__ == "__main__":
 
@@ -169,9 +195,9 @@ if __name__ == "__main__":
 
 
     # run demo with random selected question
-    run_demo(file_path='test/yesQA.json',output_path='test/yesQA_results.json',search_limit=3,k=5)
-    run_demo(file_path='test/noQA.json',output_path='test/noQA_results.json',search_limit=3,k=5)
-    
+    #run_demo(file_path='test/yesQA.json',output_path='test/yesQA_results.json',search_limit=3,k=5)
+    #run_demo(file_path='test/noQA.json',output_path='test/noQA_results.json',search_limit=3,k=5)
+    run_pubmedQA(file_path='test/pqa_labeled.json',output_path='test/results/pqa_labeled_3R.json',search_limit=3,k=5)
     
     
     
