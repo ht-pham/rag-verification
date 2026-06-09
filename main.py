@@ -64,11 +64,12 @@ def load_components():
 
 #------------------ END OF LOADING COMPONENTS' FUNCTION ------------------------
 
-
+#------------------- PIPELINE FUNCTIONS ------------------------------
 def run_generation_pipeline(query,context,agents):
     ''' When context is retrieved, run the rest of the pipelines '''
 
     answer = ""
+    context = context.replace("\n"," ").strip()
     print(f"*** Extracted context: \n{context} ***\n\n")
     verified,score = agents[0].classify(query,context)
     print(f"*** Simple answer: {verified}, confident score: {score} ***")
@@ -76,10 +77,10 @@ def run_generation_pipeline(query,context,agents):
         answer = verified
 
     else:
-        # summary = agents[1].summarize(context.replace("\n"," ").strip())
-        # print(f"*** Initial summary: {summary} ***")
-        # answer = verified + " because "+ summary
-        answer = verified #+ " because " + context.replace("\n"," ").strip()
+        summary = agents[1].summarize(context.replace("\n"," ").strip())
+        
+        answer = verified + " because "+ summary
+        #answer = verified + " because " + summary.replace("\n"," ").strip()
     
     return verified, answer
 
@@ -110,26 +111,36 @@ def recursive_retrieval(search_limit,query,k,rag,agents):
             break
     
     return context, verified, answer
+#------------------- END OF PIPELINE FUNCTIONS ------------------------------
 
+#------------------- DEMOS FUNCTIONS ------------------------------
+def test(search_limit):
+    rag, agents = load_components()
 
-
+    test_queries = [
+        "Do beta-antagonists reduce heart rate?",
+        "Do beta-blockers lower blood pressure?",
+        "Do anti-anxiety agents affect neurotransmitter activity?",
+        "Is structure-activity relationship important in drug design?",
+        "Is C-reactive protein a reliable biomarker for cardiovascular disease?",
+        "Is isoproterenol used in cardiac treatment?",
+        "Does immunotherapy improve survival outcomes in patients with melanoma?",
+        "Does regular physical activity reduce the risk of developing type 2 diabetes?",
+        "Is hypertension associated with high blood pressure?"
+    ]
+    
+    random_query_index = random.randint(0, len(test_queries)-1)
+    query = test_queries[random_query_index]
+    print(f"Selected question: {query}")
+    context, verified, answer=recursive_retrieval(search_limit=search_limit,query=query,k=5,rag=rag,agents=agents)        
+    # for q in test_queries:
+    #     print(f"Question: {q}")
+    #     recursive_retrieval(search_limit=3,query=q,k=5,rag=rag,agents=agents)
 
 def run_demo(file_path='test/yesQA.json',output_path='test/yesQA_results.json',search_limit=10,k=5):
 
     rag, agents = load_components()
 
-    # test_queries = [
-    #     "Do beta-antagonists reduce heart rate?",
-    #     "Do beta-blockers lower blood pressure?",
-    #     "Can drugs degrade over time?",
-    #     "Do anti-anxiety agents affect neurotransmitter activity?",
-    #     "Is structure-activity relationship important in drug design?",
-    #     "Is C-reactive protein a reliable biomarker for cardiovascular disease?",
-    #     "Is isoproterenol used in cardiac treatment?",
-    #     "Does immunotherapy improve survival outcomes in patients with melanoma?",
-    #     "Does regular physical activity reduce the risk of developing type 2 diabetes?",
-    #     "Is hypertension associated with high blood pressure?"
-    # ]
     test_queries = []
     contexts = []
     
@@ -152,14 +163,6 @@ def run_demo(file_path='test/yesQA.json',output_path='test/yesQA_results.json',s
 
     with open(output_path,'w') as file:
         json.dump(contexts, file, indent=4)
-    
-    # random_query_index = random.randint(0, len(test_queries)-1)
-    # query = test_queries[random_query_index]
-    # print(f"Selected question: {query}")
-    # context, verified, answer=recursive_retrieval(search_limit=10,query=query,k=5,rag=rag,agents=agents)        
-    # # for q in test_queries:
-    # #     print(f"Question: {q}")
-    # #     recursive_retrieval(search_limit=3,query=q,k=5,rag=rag,agents=agents)
 
 def run_pubmedQA(file_path='test/pubmedQA_labeled.json',output_path='test/pubmedQA_results.json',search_limit=10,k=5):
 
@@ -192,12 +195,13 @@ if __name__ == "__main__":
     # Run this when need to rebuild the vectorstore
     #vectorstore, meSH_terms, meSH_terms_counts = build_local_db()
     #meSH_terms, meSH_terms_counts, qa, docs = load_all_data()
-
+    # run a short test demo
+    test(search_limit=5)
 
     # run demo with random selected question
     #run_demo(file_path='test/yesQA.json',output_path='test/yesQA_results.json',search_limit=3,k=5)
     #run_demo(file_path='test/noQA.json',output_path='test/noQA_results.json',search_limit=3,k=5)
-    run_pubmedQA(file_path='test/pqa_labeled.json',output_path='test/results/pqa_labeled_3R.json',search_limit=3,k=5)
+    #run_pubmedQA(file_path='test/pqa_labeled.json',output_path='test/results/pqa_labeled_3R.json',search_limit=3,k=5)
     
     
     

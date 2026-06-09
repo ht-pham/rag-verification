@@ -4,6 +4,15 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 class NormalizedEmbeddings(HuggingFaceEmbeddings):
 
+    # def __init__(self, model_name="all-MiniLM-L6-v2", **kwargs):
+    #     model_kwargs = dict(kwargs.pop("model_kwargs", {}))
+    #     model_kwargs.setdefault("local_files_only", True)
+    #     super().__init__(
+    #         model_name=model_name,
+    #         model_kwargs=model_kwargs,
+    #         **kwargs,
+    #     )
+
     def embed_documents(self, documents):
         # Get the original embeddings
         original_embeddings = super().embed_documents(documents)

@@ -215,7 +215,7 @@ class PubMedParser:
         
 
         # Compute cosine similarity scores for retrieved chunks
-        # 0 = completely dissimilar, 1 = identical
+        # -1 = completely dissimilar, 1 = identical
         norm_results = []
         cos_sim_scores = []
         for doc, score in results:
