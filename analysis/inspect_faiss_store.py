@@ -52,7 +52,8 @@ def describe_index(index: faiss.Index) -> dict:
         sample_count = min(100, stats["ntotal"])
         vectors = index.reconstruct_n(0, sample_count)
         vectors = np.asarray(vectors, dtype=np.float32)
-        stats["sample_vectors"] = sample_count
+        stats['vector_id_0'] = vectors[0]
+        #stats["sample_vectors"] = sample_count
         stats["sample_mean_norm"] = float(np.linalg.norm(vectors, axis=1).mean())
         stats["sample_mean"] = float(vectors.mean())
         stats["sample_std"] = float(vectors.std())

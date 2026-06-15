@@ -178,6 +178,7 @@ class PubMedParser:
     
     def retrieve_similar_chunks(self,query,vector_store_path,k=5,search_again=False):
         #norm_query = embeddings.embed_query(query=query)
+        import numpy as np
         retriever = self.load_vectorstore(vector_store_path)
         
         # Find related MeSH terms from the query
@@ -201,7 +202,7 @@ class PubMedParser:
             # Take the top k from the filtered results
             results = filtered_results
         else: # if no related MeSH terms, return context as "None" 
-            return "None"
+            return "None", 0.0
         
         titles = [r[0].metadata['title'] for r in results]
         if search_again==False:
@@ -224,7 +225,7 @@ class PubMedParser:
 
         context = ''
         relevant_chunks = []
-        
+        rel_cos_sim_scores = []
         for i,r in enumerate(norm_results):
              
             # About L2 distance score: The smaller the score, the more similar the chunk is to the query.
@@ -250,17 +251,22 @@ class PubMedParser:
             if cos_sim_scores[i] >= 0.6:
                 parsed_chunk = r[0].page_content.replace("\n"," ").strip()
                 relevant_chunks.append(parsed_chunk)
-
+                rel_cos_sim_scores.append(cos_sim_scores[i])
+        
+        
         context = '\n'.join(relevant_chunks)
         if context == "":
-            return "None"
+            return "None",0.0
         
-        return context
+        cosine_similarity = np.array(rel_cos_sim_scores)
+        cosine_similarity_mean = np.mean(cosine_similarity)
+        return context, cosine_similarity_mean
         
 
     def build_vectorstore(self,chunks,vector_store_path):
 
         from langchain_community.vectorstores import FAISS
+        from langchain_community.vectorstores.faiss import DistanceStrategy
         embeddings = NormalizedEmbeddings(
             model_name="all-MiniLM-L6-v2"
         )
@@ -268,6 +274,7 @@ class PubMedParser:
         vectorstore = FAISS.from_documents(
             chunks,
             embeddings,
+            #distance_strategy=DistanceStrategy.MAX_INNER_PRODUCT
         )
         doc_count = len(vectorstore.index_to_docstore_id)
         print(f"Total vectors in FAISS store: {doc_count}")
@@ -360,6 +367,7 @@ class PubMedParser:
                 related_terms.append(term)
         return related_terms
     
-    
+    def find_entity_links(self,query):
+        pass
     
 
